@@ -1,7 +1,7 @@
 {
     "name" : "browserify",
     "version" : "1.8.1",
-    "description" : "Browser-side require() for js directories and npm modules",
+    "description" : "Experimenting with browserify. You don't want to use this.",
     "main" : "index.js",
     "bin" : {
         "browserify" : "bin/cli.js"
@@ -12,7 +12,7 @@
     },
     "repository" : {
         "type" : "git",
-        "url" : "http://github.com/substack/node-browserify.git"
+        "url" : "http://github.com/bacchusrx/node-browserify.git"
     },
     "keywords" : [
         "browser",
@@ -34,7 +34,7 @@
     },
     "devDependencies" : {
         "tap" : "0.0.x",
-        "connect" : ">=1.4.1 <1.5",
+        "connect" : ">=1.7.2",
         "hashish" : ">=0.0.2 <0.1",
         "traverse" : ">=0.3.8 <0.4",
         "backbone" : ">=0.3.3",
@@ -42,7 +42,8 @@
         "jade": "0.10.4",
         "seq": "0.3.3",
         "jquery-browserify" : "*",
-        "jsdom" : "0.2.x"
+        "jsdom" : "0.2.x",
+        "lazy" : "*"
     },
     "author" : {
         "name" : "James Halliday",

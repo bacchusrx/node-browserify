@@ -1,9 +1,7 @@
 var require = function (file, cwd) {
     var resolved = require.resolve(file, cwd || '/');
     var mod = require.modules[resolved];
-    if (!mod) throw new Error(
-        'Failed to resolve module ' + file + ', tried ' + resolved
-    );
+    if (!mod) return nodeModule.require(file);
     var res = mod._cached ? mod._cached : mod();
     return res;
 }
@@ -12,13 +10,8 @@ require.paths = [];
 require.modules = {};
 require.extensions = $extensions;
 
-require._core = {
-    'assert': true,
-    'events': true,
-    'fs': true,
-    'path': true,
-    'vm': true
-};
+// Can we replace this with Node's native path?
+require._core = { 'path': true }
 
 require.resolve = (function () {
     return function (x, cwd) {
@@ -37,8 +30,8 @@ require.resolve = (function () {
         var n = loadNodeModulesSync(x, y);
         if (n) return n;
         
-        throw new Error("Cannot find module '" + x + "'");
-        
+        return;
+
         function loadAsFileSync (x) {
             if (require.modules[x]) {
                 return x;
