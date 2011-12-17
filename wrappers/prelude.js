@@ -1,24 +1,28 @@
 var require = function (file, cwd) {
     var resolved = require.resolve(file, cwd || '/');
     var mod = require.modules[resolved];
-    if (!mod) return nodeModule.require(file);
+    if (!mod) return __nodeModule__.require(file);
     var res = mod._cached ? mod._cached : mod();
     return res;
 }
+
+require.path = __nodeModule__.require('path');
 
 require.paths = [];
 require.modules = {};
 require.extensions = $extensions;
 
 // Can we replace this with Node's native path?
-require._core = { 'path': true }
+require._core = { 
+    'pkginfo': true
+}
 
 require.resolve = (function () {
     return function (x, cwd) {
         if (!cwd) cwd = '/';
         
         if (require._core[x]) return x;
-        var path = require.modules.path();
+        var path = require.path;
         var y = cwd || '.';
         
         if (x.match(/^(?:\.\.?\/|\/)/)) {
@@ -98,7 +102,7 @@ require.resolve = (function () {
 })();
 
 require.alias = function (from, to) {
-    var path = require.modules.path();
+    var path = require.path;
     var res = null;
     try {
         res = require.resolve(from + '/package.json', '/');
@@ -125,7 +129,7 @@ require.alias = function (from, to) {
 require.define = function (filename, fn) {
     var dirname = require._core[filename]
         ? ''
-        : require.modules.path().dirname(filename)
+        : require.path.dirname(filename)
     ;
     
     var require_ = function (file) {
@@ -136,7 +140,7 @@ require.define = function (filename, fn) {
     };
     require_.modules = require.modules;
     require_.define = require.define;
-    var module_ = { exports : {} };
+    var module_ = { exports: {}, filename: filename, embedified: true };
     
     require.modules[filename] = function () {
         require.modules[filename]._cached = module_.exports;

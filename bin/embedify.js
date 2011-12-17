@@ -16,11 +16,7 @@ var argv = require('optimist')
 
 var bundle = browserify();
 
-bundle.require(argv.require);
-
-bundle.addEntry('entry.js', {
-    body: "nodeModule.exports = require('" + argv.require + "');"
-});
+bundle.embed(argv.require);
 
 fs.writeFile(argv.outfile, bundle.bundle(), function() {
     console.log("Written bundle to " + argv.outfile);
