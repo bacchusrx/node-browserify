@@ -1,8 +1,8 @@
 {
     "name" : "embedify",
-    "version" : "0.1.0",
+    "version" : "0.1.1",
     "description" : "Experimenting with browserify. You don't want to use this.",
-    "main" : "index.js",
+    "main" : "lib/wrap.js",
     "bin" : {
         "embedify" : "bin/embedify.js"
     },

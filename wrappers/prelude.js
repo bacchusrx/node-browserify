@@ -1,18 +1,17 @@
 var require = function (file, cwd) {
     var resolved = require.resolve(file, cwd || '/');
     var mod = require.modules[resolved];
-    if (!mod) return __nodeModule__.require(file);
+    if (!mod) return __require(file);
     var res = mod._cached ? mod._cached : mod();
     return res;
 }
 
-require.path = __nodeModule__.require('path');
+require.path = __require('path');
 
 require.paths = [];
 require.modules = {};
 require.extensions = $extensions;
 
-// Can we replace this with Node's native path?
 require._core = { 
     'pkginfo': true
 }
