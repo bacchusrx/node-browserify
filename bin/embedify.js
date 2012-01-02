@@ -8,10 +8,6 @@ var argv = require('optimist')
     alias: 'r',
     desc: 'Name of module or file to require'
   })
-  .option('alias', {
-    alias: 'a',
-    desc: 'Alias of module or file'
-  })
   .option('outfile', {
     alias: 'o',
     desc: 'Filename of resultant bundle'
@@ -21,10 +17,6 @@ var argv = require('optimist')
 var bundle = embedify();
 
 bundle.embed(argv.require);
-
-if (argv.alias) {
-  bundle.alias(argv.alias, argv.require);
-}
 
 fs.writeFile(argv.outfile, bundle.bundle(), function() {
     console.log("Written bundle to " + argv.outfile);
