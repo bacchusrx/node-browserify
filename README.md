@@ -9,5 +9,5 @@ purpose.
 
 ## Credits
 
-browserify by substack (James Halliday)
-pkginfo by indexzero (Charlie Robbins)
+* browserify by substack (James Halliday)
+* pkginfo by indexzero (Charlie Robbins)
