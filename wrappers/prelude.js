@@ -2,7 +2,7 @@ var require = function (file, cwd) {
     var resolved = require.resolve(file, cwd || '/');
     var mod = require.modules[resolved];
     if (!mod) return __require(file);
-    var res = mod._cached ? mod._cached : mod();
+    var res = mod._cached ? mod._cached.exports : mod();
     return res;
 }
 
@@ -51,7 +51,7 @@ require.resolve = (function () {
             var pkgfile = x + '/package.json';
             if (require.modules[pkgfile]) {
                 var pkg = require.modules[pkgfile]();
-                var b = pkg.browserify;
+                var b = pkg.embedify;
                 if (typeof b === 'object' && b.main) {
                     var m = loadAsFileSync(path.resolve(x, b.main));
                     if (m) return m;
@@ -111,7 +111,7 @@ require.alias = function (from, to) {
     }
     var basedir = path.dirname(res);
     
-    var keys = Object_keys(require.modules);
+    var keys = Object.keys(require.modules);
     
     for (var i = 0; i < keys.length; i++) {
         var key = keys[i];
@@ -142,7 +142,7 @@ require.define = function (filename, fn) {
     var module_ = { exports: {}, filename: filename, embedified: true };
     
     require.modules[filename] = function () {
-        require.modules[filename]._cached = module_.exports;
+        require.modules[filename]._cached = module_;
         fn.call(
             module_.exports,
             require_,
@@ -151,13 +151,7 @@ require.define = function (filename, fn) {
             dirname,
             filename
         );
-        require.modules[filename]._cached = module_.exports;
+        require.modules[filename]._cached = module_;
         return module_.exports;
     };
-};
-
-var Object_keys = Object.keys || function (obj) {
-    var res = [];
-    for (var key in obj) res.push(key)
-    return res;
 };
