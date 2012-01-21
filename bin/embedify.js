@@ -2,6 +2,7 @@
 
 var embedify = require('embedify');
 var fs = require('fs');
+var path = require('path');
 
 var argv = require('optimist')
   .demand(['embed', 'outfile'])
@@ -16,7 +17,7 @@ var argv = require('optimist')
   })
   .option('require', {
     alias: 'r',
-    desc: 'Additional modules or files to include in the bundle'
+    desc: 'Include additional modules or files in bundle: "module:target:basedir"'
   })
   .option('alias', {
     alias: 'a',
@@ -28,8 +29,12 @@ var bundle = embedify();
 
 ([].concat(argv.require || [])).forEach(function (req) {
     if (req.match(/:/)) {
-        var s = req.split(':');
-        bundle.require(s[0], { target : s[1] });
+        var s = req.split(':'), opts = {};
+
+        if (s[1]) opts.target  = s[1];
+        if (s[2]) opts.basedir = path.resolve(process.cwd(), s[2]);
+
+        bundle.require(s[0], opts);
     }
     else {
         bundle.require(req);
