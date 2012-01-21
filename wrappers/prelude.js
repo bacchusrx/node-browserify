@@ -1,9 +1,14 @@
 var require = function (file, cwd) {
+  try {
     var resolved = require.resolve(file, cwd || '/');
-    var mod = require.modules[resolved];
-    if (!mod) return __require(file);
-    var res = mod._cached ? mod._cached.exports : mod();
-    return res;
+  }
+  catch (e) {
+    var resolved = null;
+  }
+  var mod = require.modules[resolved];
+  if (!mod) return __require(file);
+  var res = mod._cached ? mod._cached.exports : mod();
+  return res;
 }
 
 require.path = __require('path');
@@ -33,7 +38,7 @@ require.resolve = (function () {
         var n = loadNodeModulesSync(x, y);
         if (n) return n;
         
-        return;
+        throw new Error("Cannot find module '" + x + "'");
 
         function loadAsFileSync (x) {
             if (require.modules[x]) {
